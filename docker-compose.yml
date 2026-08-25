@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: ai_sql_postgres
+
+    environment:
+      POSTGRES_DB: ecommerce
+      POSTGRES_USER: analyst
+      POSTGRES_PASSWORD: analyst123
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U analyst -d ecommerce"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+  
